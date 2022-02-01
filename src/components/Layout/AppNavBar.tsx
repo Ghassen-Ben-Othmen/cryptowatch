@@ -6,10 +6,10 @@ import { IconButton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Brand from './Brand';
 import ThemeSwitch from './ThemeSwitch';
-import { globalStatsService } from '../../services';
-import { retrieveGlobalStatsAction } from '../../store/golobalStatsSlice';
-import { RootState } from '../../store';
+import { retrieveGlobalStatsAction } from '../../store/navbarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import CurrenciesRef from './CurrenciesRef';
+import Stats from './Stats';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -44,32 +44,38 @@ interface Props {
 function AppNavBar({ open, handleDrawerOpen }: Props) {
 
   const dispatch = useAppDispatch();
-  const globalStats = useAppSelector(state => state.globalStats);
-  console.log(globalStats);
+  const navbarState = useAppSelector(state => state.navbar);
+  console.log(navbarState);
 
   useEffect(() => {
     retrieveGlobalStatsAction(dispatch);
-  }, []);
+  }, [dispatch]);
 
   return (
     <AppBar position="fixed" open={open}>
-        <Toolbar variant="dense">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          { !open && <Brand /> }
+      <Toolbar variant="dense">
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            marginRight: '36px',
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        {!open && <Brand />}
+        <div style={{ flexGrow: 1, overflowX: 'scroll' }}>
+          <Stats stats={navbarState.stats} currencySign={navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol} />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} />
           <ThemeSwitch />
-        </Toolbar>
-      </AppBar>
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 }
 

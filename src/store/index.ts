@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { globalStatsSlice } from "./golobalStatsSlice";
+import { navbarSlice } from "./navbarSlice";
 
 const store = configureStore({
     reducer: {
-        globalStats: globalStatsSlice.reducer
+        navbar: navbarSlice.reducer
     }
 });
 
