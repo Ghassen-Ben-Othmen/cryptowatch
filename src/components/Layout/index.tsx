@@ -5,7 +5,7 @@ import AppNavBar from './AppNavBar';
 import AppSideBar, { DrawerHeader } from './AppSideBar';
 
 type Props = {
-    children?: JSX.Element
+  children?: JSX.Element
 };
 
 function Layout({ children }: Props) {
@@ -20,11 +20,11 @@ function Layout({ children }: Props) {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={(theme) => ({ display: 'flex', bgcolor: theme.palette.grey[100] })}>
       <CssBaseline />
       <AppNavBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <AppSideBar open={open} handleDrawerClose={handleDrawerClose} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={(theme) => ({ flexGrow: 1, p: 3 })}>
         <DrawerHeader />
         {children}
       </Box>

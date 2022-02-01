@@ -6,7 +6,7 @@ import { IconButton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Brand from './Brand';
 import ThemeSwitch from './ThemeSwitch';
-import { retrieveGlobalStatsAction } from '../../store/navbarSlice';
+import { initAction } from '../../store/navbarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import CurrenciesRef from './CurrenciesRef';
 import Stats from './Stats';
@@ -45,10 +45,9 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
 
   const dispatch = useAppDispatch();
   const navbarState = useAppSelector(state => state.navbar);
-  console.log(navbarState);
 
   useEffect(() => {
-    retrieveGlobalStatsAction(dispatch);
+    initAction(dispatch);
   }, [dispatch]);
 
   return (
@@ -67,7 +66,7 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
           <MenuIcon />
         </IconButton>
         {!open && <Brand />}
-        <div style={{ flexGrow: 1, overflowX: 'scroll' }}>
+        <div style={{ flexGrow: 1, overflowX: 'auto' }}>
           <Stats stats={navbarState.stats} currencySign={navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>

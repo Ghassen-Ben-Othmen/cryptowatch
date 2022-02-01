@@ -4,14 +4,23 @@ import CurrencyRef from "../models/currencyRef";
 import GlobalStats from "../models/globalStats";
 import { currenciesRefService, globalStatsService } from '../services';
 
+type NavbarState = {
+    loading: boolean;
+    stats: GlobalStats;
+    currenciesRef: CurrencyRef[];
+    selectedCurrency: CurrencyRef;
+}
+
+const initState: NavbarState = {
+    loading: false,
+    stats: {} as GlobalStats,
+    currenciesRef: [],
+    selectedCurrency: {} as CurrencyRef
+}
+
 const navbarSlice = createSlice({
     name: 'navbar',
-    initialState: {
-        loading: false,
-        stats: {} as GlobalStats,
-        currenciesRef: [] as CurrencyRef[],
-        selectedCurrency: {} as CurrencyRef
-    },
+    initialState: initState,
     reducers: {
         setGlobalStats: (state, action: PayloadAction<GlobalStats>) => {
             state.stats = action.payload;
@@ -31,7 +40,7 @@ const navbarSlice = createSlice({
 
 const { setGlobalStats, setLoading, setCurrenciesRef, setSelectedCurrency } = navbarSlice.actions;
 
-const retrieveGlobalStatsAction = async (dispatch: AppDispatch) => {
+const initAction = async (dispatch: AppDispatch) => {
     dispatch(setLoading(true));
     const stats$ = globalStatsService.retrieve();
     const currenciesRef$ = currenciesRefService.retrieve();
@@ -45,4 +54,4 @@ const selectCurrencyAction = (dispatch: AppDispatch, currencyRef: CurrencyRef) =
     dispatch(setSelectedCurrency(currencyRef));
 }
 
-export { navbarSlice, retrieveGlobalStatsAction, selectCurrencyAction };
+export { navbarSlice, initAction, selectCurrencyAction };
