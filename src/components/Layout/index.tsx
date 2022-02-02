@@ -20,11 +20,11 @@ function Layout({ children }: Props) {
   };
 
   return (
-    <Box sx={(theme) => ({ display: 'flex', bgcolor: theme.palette.grey[100] })}>
+    <Box sx={(theme) => ({ display: 'flex' })}>
       <CssBaseline />
       <AppNavBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <AppSideBar open={open} handleDrawerClose={handleDrawerClose} />
-      <Box component="main" sx={(theme) => ({ flexGrow: 1, p: 3 })}>
+      <Box component="main" sx={(theme) => ({ flexGrow: 1, p: 3, bgcolor: theme.palette.grey[100] })}>
         <DrawerHeader />
         {children}
       </Box>

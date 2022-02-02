@@ -25,7 +25,7 @@ const TitleHeader = ({ name, change }: { name: string; change: number }) => (
 function Coin({ coin }: Props) {
     const sparklineData = coin.sparkline.filter(v => !!v).map(v => parseFloat(v!));
     return (
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <ButtonBase style={{ textAlign: 'left' }}>
                 <Card sx={{ width: 250, height: 250 }}>
                     <CardHeader
