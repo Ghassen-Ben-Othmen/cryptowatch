@@ -51,7 +51,7 @@ const { setCoins, setExchanges, setNews } = homeSlice.actions;
 
 const retrieveCoinsAction = async (dispatch: AppDispatch) => {
     const data = await coinsService.retrieve();
-    dispatch(setCoins(data.slice(0, 8)));
+    dispatch(setCoins(data.slice(0, 12)));
 }
 
 const retrieveExchangesAction = async (dispatch: AppDispatch) => {
@@ -61,7 +61,7 @@ const retrieveExchangesAction = async (dispatch: AppDispatch) => {
 
 const retrieveNewsAction = async (dispatch: AppDispatch) => {
     const data = await newsService.retrieve();
-    dispatch(setNews(data.slice(0, 8)));
+    dispatch(setNews(data.slice(0, 12)));
 }
 
 export { homeSlice, retrieveCoinsAction, retrieveExchangesAction, retrieveNewsAction };
