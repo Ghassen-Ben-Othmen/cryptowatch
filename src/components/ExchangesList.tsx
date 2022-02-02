@@ -6,7 +6,7 @@ interface Props {
     exchanges: ExchangeModel[];
 }
 
-function Exchanges({ exchanges }: Props) {
+function ExchangesList({ exchanges }: Props) {
     return (
         <React.Fragment>
             {
@@ -16,4 +16,4 @@ function Exchanges({ exchanges }: Props) {
     );
 }
 
-export default Exchanges;
+export default ExchangesList;

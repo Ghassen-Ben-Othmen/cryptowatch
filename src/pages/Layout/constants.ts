@@ -8,21 +8,31 @@ import { SvgIconTypeMap } from '@mui/material';
 
 export const drawerWidth = 240;
 
-export const navLinks: { text: string, icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string; } }[] = [
+type NavLink = {
+    text: string,
+    icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string; },
+    to: string
+}
+
+export const navLinks: NavLink[] = [
     {
         text: 'Coins',
-        icon: MonetizationOnOutlinedIcon
+        icon: MonetizationOnOutlinedIcon,
+        to: 'coins'
     },
     {
         text: 'Exchanges',
-        icon: CurrencyExchangeOutlinedIcon
+        icon: CurrencyExchangeOutlinedIcon,
+        to: 'exchanges'
     },
     {
         text: 'News',
-        icon: NewspaperOutlinedIcon
+        icon: NewspaperOutlinedIcon,
+        to: 'news'
     },
     {
         text: 'Convertor',
-        icon: ChangeCircleOutlinedIcon
+        icon: ChangeCircleOutlinedIcon,
+        to: 'convertor'
     }
 ];

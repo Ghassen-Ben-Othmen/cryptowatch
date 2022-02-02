@@ -6,7 +6,7 @@ interface Props {
     coins: CoinModel[];
 }
 
-function Coins({ coins }: Props) {
+function CoinsList({ coins }: Props) {
     return (
         <React.Fragment>
             {
@@ -16,4 +16,4 @@ function Coins({ coins }: Props) {
     );
 }
 
-export default Coins;
+export default CoinsList;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { drawerWidth } from './constants';
@@ -43,11 +43,13 @@ interface Props {
 
 function AppNavBar({ open, handleDrawerOpen }: Props) {
 
+  const [loading, setLoading] = useState(true);
+
   const dispatch = useAppDispatch();
   const navbarState = useAppSelector(state => state.navbar);
 
   useEffect(() => {
-    initAction(dispatch);
+    initAction(dispatch).finally(() => setLoading(false));
   }, [dispatch]);
 
   return (
@@ -67,10 +69,18 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
         </IconButton>
         {!open && <Brand />}
         <div style={{ flexGrow: 1, overflowX: 'auto' }}>
-          <Stats stats={navbarState.stats} currencySign={navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol} />
+          {
+            loading ? <div>Loading...</div> : (
+              <Stats stats={navbarState.stats} currencySign={navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol} />
+            )
+          }
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} />
+          {
+            loading ? <div>L...</div> : (
+              <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} />
+            )
+          }
           <ThemeSwitch />
         </div>
       </Toolbar>

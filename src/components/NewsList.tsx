@@ -6,7 +6,7 @@ interface Props {
     news: NewsModel[];
 }
 
-function News({ news }: Props) {
+function NewsList({ news }: Props) {
     return (
         <React.Fragment>
             {
@@ -16,4 +16,4 @@ function News({ news }: Props) {
     );
 }
 
-export default News;
+export default NewsList;

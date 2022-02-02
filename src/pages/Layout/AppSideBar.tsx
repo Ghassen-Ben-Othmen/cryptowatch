@@ -3,10 +3,11 @@ import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { drawerWidth, navLinks } from './constants';
 import { closedMixin, openedMixin } from './mixins';
-import { Divider, IconButton, List, ListItem, ListItemIcon, ListItemText, useTheme } from '@mui/material';
+import { Divider, IconButton, List, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Brand from './Brand';
+import { Link, useLocation } from 'react-router-dom';
 
 export const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -41,26 +42,27 @@ interface Props {
 
 function AppSideBar({ open, handleDrawerClose }: Props) {
   const theme = useTheme();
+  const location = useLocation();
   return (
     <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-            { open && <Brand /> }
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {navLinks.map(nav => (
-            <ListItem button key={nav.text}>
-              <ListItemIcon>
-                <nav.icon />
-              </ListItemIcon>
-              <ListItemText primary={nav.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      <DrawerHeader>
+        {open && <Brand />}
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
+      <List>
+        {navLinks.map(nav => (
+          <ListItemButton component={Link} to={nav.to} key={nav.text} selected={location.pathname === '/' + nav.to}>
+            <ListItemIcon>
+              <nav.icon />
+            </ListItemIcon>
+            <ListItemText primary={nav.text} />
+          </ListItemButton>
+        ))}
+      </List>
+    </Drawer>
   );
 }
 
