@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from ".";
 import Coin from "../models/coin";
 import Exchange from "../models/exchange";
-import { coinsService, exchnagesService } from "../services";
+import News from "../models/news";
+import { coinsService, exchnagesService, newsService } from "../services";
 
 type HomeState = {
     coins: {
@@ -12,6 +13,10 @@ type HomeState = {
     exchanges: {
         loading: boolean;
         data: Exchange[];
+    },
+    news: {
+        loading: boolean;
+        data: News[];
     }
 }
 
@@ -21,6 +26,10 @@ const initState: HomeState = {
         data: []
     },
     exchanges: {
+        loading: false,
+        data: []
+    },
+    news: {
         loading: false,
         data: []
     }
@@ -36,16 +45,24 @@ const homeSlice = createSlice({
         setCoinsLoading: (state, action: PayloadAction<boolean>) => {
             state.coins.loading = action.payload;
         },
+
         setExchanges: (state, action: PayloadAction<Exchange[]>) => {
             state.exchanges.data = action.payload;
         },
         setExchangesLoading: (state, action: PayloadAction<boolean>) => {
             state.exchanges.loading = action.payload;
+        },
+
+        setNews: (state, action: PayloadAction<News[]>) => {
+            state.news.data = action.payload;
+        },
+        setNewsLoading: (state, action: PayloadAction<boolean>) => {
+            state.news.loading = action.payload;
         }
     }
 });
 
-const { setCoins, setCoinsLoading, setExchanges, setExchangesLoading } = homeSlice.actions;
+const { setCoins, setCoinsLoading, setExchanges, setExchangesLoading, setNews, setNewsLoading } = homeSlice.actions;
 
 const retrieveCoinsAction = async (dispatch: AppDispatch) => {
     dispatch(setCoinsLoading(true));
@@ -61,9 +78,17 @@ const retrieveExchangesAction = async (dispatch: AppDispatch) => {
     dispatch(setExchangesLoading(false));
 }
 
+const retrieveNewsAction = async (dispatch: AppDispatch) => {
+    dispatch(setNewsLoading(true));
+    const data = await newsService.retrieve();
+    dispatch(setNews(data));
+    dispatch(setNewsLoading(false));
+}
+
 const initAction = (dispatch: AppDispatch) => {
     retrieveCoinsAction(dispatch);
     retrieveExchangesAction(dispatch);
+    retrieveNewsAction(dispatch);
 }
 
 export { homeSlice, initAction };
