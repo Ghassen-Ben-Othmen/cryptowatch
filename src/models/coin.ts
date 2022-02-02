@@ -6,7 +6,7 @@ type Coin = {
     iconUrl: string | null;
     marketCap: string;
     price: string;
-    listedAt: number;
+    listedAt: number | null;
     tier: number;
     change: string;
     rank: number;

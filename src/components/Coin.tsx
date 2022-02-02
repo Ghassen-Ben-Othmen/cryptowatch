@@ -11,13 +11,13 @@ interface Props {
 
 const TitleHeader = ({ name, change }: { name: string; change: number }) => (
     <Stack direction="row">
-        <Typography variant='body1' flexGrow={1}>{name}</Typography>
+        <Typography variant='body2' flexGrow={1}>{name}</Typography>
 
         <Stack direction="row">
             {change > 0 ? <ArrowDropUpIcon color={"success"} /> : <ArrowDropDownIcon color={"error"} />}
             {change > 0 ?
-                <Typography variant='body1' color={"green"}>{change}</Typography>
-                : <Typography variant='body1' color={"red"}>{change * -1}</Typography>}
+                <Typography variant='body2' color={"green"}>{change}</Typography>
+                : <Typography variant='body2' color={"red"}>{change * -1}</Typography>}
         </Stack>
     </Stack>
 );

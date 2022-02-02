@@ -3,6 +3,7 @@ import { Grid, styled, Typography } from '@mui/material';
 import { initAction } from '../store/homeSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import Coins from '../components/Coins';
+import Exchanges from '../components/Exchanges';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -30,10 +31,16 @@ function Home() {
 
     return (
         <React.Fragment>
-            <section>
+            <section style={{ marginBottom: '1.5rem' }}>
                 <Title variant='h5'>Top Coins</Title>
                 <Grid container spacing={2}>
                     <Coins coins={homeState.coins.data} />
+                </Grid>
+            </section>
+            <section style={{ marginBottom: '1.5rem' }}>
+                <Title variant='h5'>Top Exchanges</Title>
+                <Grid container spacing={2}>
+                    <Exchanges exchanges={homeState.exchanges.data} />
                 </Grid>
             </section>
         </React.Fragment>
