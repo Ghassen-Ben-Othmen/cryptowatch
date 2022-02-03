@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Observable, tap } from "rxjs";
 import { AppDispatch } from ".";
 import Coin from "../models/coin";
 import { coinsService } from "../services";
@@ -23,9 +24,14 @@ const coinsSlice = createSlice({
 
 const { setCoins } = coinsSlice.actions;
 
-const retrieveCoinsAction = async (dispatch: AppDispatch) => {
-    const data = await coinsService.retrieve();
-    dispatch(setCoins(data));
+const retrieveCoinsAction = (dispatch: AppDispatch): Observable<Coin[]> => {
+    return coinsService.retrieve().pipe(
+        tap(data => {
+            dispatch(setCoins(data));
+        })
+    );
+    // const data = await coinsService.retrieve();
+    // dispatch(setCoins(data));
 }
 
 export { coinsSlice, retrieveCoinsAction };

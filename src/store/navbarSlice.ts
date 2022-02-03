@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { mergeMap, Observable, tap } from "rxjs";
 import { AppDispatch } from ".";
 import CurrencyRef from "../models/currencyRef";
 import GlobalStats from "../models/globalStats";
@@ -35,12 +36,16 @@ const navbarSlice = createSlice({
 
 const { setGlobalStats, setCurrenciesRef, setSelectedCurrency } = navbarSlice.actions;
 
-const initAction = async (dispatch: AppDispatch) => {
-    const stats$ = globalStatsService.retrieve();
-    const currenciesRef$ = currenciesRefService.retrieve();
-    const [stats, currenciesRef] = await Promise.all([stats$, currenciesRef$]);
-    dispatch(setGlobalStats(stats));
-    dispatch(setCurrenciesRef(currenciesRef));
+const initAction = (dispatch: AppDispatch): Observable<any> => {
+    return globalStatsService.retrieve().pipe(
+        mergeMap(stats => {
+            dispatch(setGlobalStats(stats));
+            return currenciesRefService.retrieve();
+        }),
+        tap(currenciesRef => {
+            dispatch(setCurrenciesRef(currenciesRef));
+        })
+    );
 }
 
 const selectCurrencyAction = (dispatch: AppDispatch, currencyRef: CurrencyRef) => {

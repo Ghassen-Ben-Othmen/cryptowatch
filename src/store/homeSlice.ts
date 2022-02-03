@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Observable, tap } from "rxjs";
 import { AppDispatch } from ".";
 import Coin from "../models/coin";
 import Exchange from "../models/exchange";
@@ -49,19 +50,28 @@ const homeSlice = createSlice({
 
 const { setCoins, setExchanges, setNews } = homeSlice.actions;
 
-const retrieveCoinsAction = async (dispatch: AppDispatch) => {
-    const data = await coinsService.retrieve();
-    dispatch(setCoins(data.slice(0, 12)));
+const retrieveCoinsAction = (dispatch: AppDispatch): Observable<Coin[]> => {
+    return coinsService.retrieve().pipe(
+        tap(data => {
+            dispatch(setCoins(data.slice(0, 12)))
+        })
+    );
 }
 
-const retrieveExchangesAction = async (dispatch: AppDispatch) => {
-    const data = await exchnagesService.retrieve();
-    dispatch(setExchanges(data));
+const retrieveExchangesAction = (dispatch: AppDispatch): Observable<Exchange[]> => {
+    return exchnagesService.retrieve().pipe(
+        tap(data => {
+            dispatch(setExchanges(data));
+        })
+    )
 }
 
-const retrieveNewsAction = async (dispatch: AppDispatch) => {
-    const data = await newsService.retrieve();
-    dispatch(setNews(data.slice(0, 12)));
+const retrieveNewsAction = (dispatch: AppDispatch): Observable<News[]> => {
+    return newsService.retrieve().pipe(
+        tap(data => {
+            dispatch(setNews(data.slice(0, 12)));
+        })
+    );
 }
 
 export { homeSlice, retrieveCoinsAction, retrieveExchangesAction, retrieveNewsAction };

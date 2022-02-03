@@ -6,6 +6,7 @@ import CoinsList from '../components/CoinsList';
 import ExchangesList from '../components/ExchangesList';
 import NewsList from '../components/NewsList';
 import { Link as RouterLink } from 'react-router-dom';
+import { forkJoin, tap } from 'rxjs';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -32,9 +33,15 @@ function Home() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        retrieveCoinsAction(dispatch).finally(() => setCoinsLoading(false));
-        retrieveExchangesAction(dispatch).finally(() => setExchangesLoading(false));
-        retrieveNewsAction(dispatch).finally(() => setNewsLoading(false));
+        const retrieveCoins$ = retrieveCoinsAction(dispatch).pipe(tap(_ => setCoinsLoading(false)));
+        const retrieveExchanges$ = retrieveExchangesAction(dispatch).pipe(tap(_ => setExchangesLoading(false)));
+        const retrieveNews$ = retrieveNewsAction(dispatch).pipe(tap(_ => setNewsLoading(false)));
+
+        const subscription = forkJoin([retrieveCoins$, retrieveExchanges$, retrieveNews$]).subscribe();
+
+        return () => {
+            subscription.unsubscribe();
+        }
     }, [dispatch]);
 
     return (

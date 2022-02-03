@@ -13,7 +13,10 @@ function Coins() {
     console.log(loading)
 
     useEffect(() => {
-        retrieveCoinsAction(dispatch).finally(() => setLoading(false));
+        const subscription = retrieveCoinsAction(dispatch).subscribe(_ => setLoading(false));
+        return () => {
+            subscription.unsubscribe();
+        }
     }, [dispatch])
 
     if (loading) return <div>loading...</div>

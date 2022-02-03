@@ -49,7 +49,11 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
   const navbarState = useAppSelector(state => state.navbar);
 
   useEffect(() => {
-    initAction(dispatch).finally(() => setLoading(false));
+    const subscription = initAction(dispatch).subscribe(_ => setLoading(false));
+
+    return () => {
+      subscription.unsubscribe();
+    }
   }, [dispatch]);
 
   return (
