@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { coinsSlice } from "./coinsSlice";
-import { homeSlice } from "./homeSlice";
+import { exchangesSlice } from "./exchangesSlice";
 import { navbarSlice } from "./navbarSlice";
+import { newsSlice } from './newsSlice';
 
 const store = configureStore({
     reducer: {
         navbar: navbarSlice.reducer,
-        home: homeSlice.reducer,
-        coins: coinsSlice.reducer
+        coins: coinsSlice.reducer,
+        exchanges: exchangesSlice.reducer,
+        news: newsSlice.reducer
     }
 });
 

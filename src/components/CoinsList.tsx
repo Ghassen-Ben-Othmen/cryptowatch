@@ -10,7 +10,7 @@ function CoinsList({ coins }: Props) {
     return (
         <React.Fragment>
             {
-                coins.map(coin => <Coin key={coin.uuid} coin={coin} />)
+                coins.map(coin => <Coin key={coin.uuid + Math.random()} coin={coin} />)
             }
         </React.Fragment>
     );

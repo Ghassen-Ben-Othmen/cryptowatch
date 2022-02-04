@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Link, styled, Typography } from '@mui/material';
-import { retrieveCoinsAction, retrieveExchangesAction, retrieveNewsAction } from '../store/homeSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import CoinsList from '../components/CoinsList';
 import ExchangesList from '../components/ExchangesList';
 import NewsList from '../components/NewsList';
+import { retrieveCoinsAction } from '../store/coinsSlice';
+import { retrieveExchangesAction } from '../store/exchangesSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { forkJoin, tap } from 'rxjs';
+import { retrieveNewsAction } from '../store/newsSlice';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -29,20 +31,24 @@ function Home() {
     const [exchangesLoading, setExchangesLoading] = useState(true);
     const [newsLoading, setNewsLoading] = useState(true);
 
-    const homeState = useAppSelector(state => state.home);
+    const coinsState = useAppSelector(state => state.coins);
+    const exchangesState = useAppSelector(state => state.exchanges);
+    const newsState = useAppSelector(state => state.news);
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const retrieveCoins$ = retrieveCoinsAction(dispatch).pipe(tap(_ => setCoinsLoading(false)));
-        const retrieveExchanges$ = retrieveExchangesAction(dispatch).pipe(tap(_ => setExchangesLoading(false)));
-        const retrieveNews$ = retrieveNewsAction(dispatch).pipe(tap(_ => setNewsLoading(false)));
+        const retrieveCoins$ = retrieveCoinsAction(coinsState, dispatch, 0).pipe(tap(_ => setCoinsLoading(false)));
+        const retrieveExchanges$ = retrieveExchangesAction(exchangesState, dispatch, 1).pipe(tap(_ => setExchangesLoading(false)));
+        const retrieveNews$ = retrieveNewsAction(newsState, dispatch, 1).pipe(tap(_ => setNewsLoading(false)));
 
         const subscription = forkJoin([retrieveCoins$, retrieveExchanges$, retrieveNews$]).subscribe();
 
         return () => {
             subscription.unsubscribe();
         }
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <React.Fragment>
@@ -52,7 +58,7 @@ function Home() {
                     coinsLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <CoinsList coins={homeState.coins.data} />
+                                <CoinsList coins={coinsState.data.slice(0, 12)} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link
@@ -74,7 +80,7 @@ function Home() {
                     exchangesLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <ExchangesList exchanges={homeState.exchanges.data} />
+                                <ExchangesList exchanges={exchangesState.data.slice(0, 12)} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link
@@ -96,7 +102,7 @@ function Home() {
                     newsLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <NewsList news={homeState.news.data} />
+                                <NewsList news={newsState.data.slice(0, 12)} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link

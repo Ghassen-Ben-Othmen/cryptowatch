@@ -10,7 +10,7 @@ function NewsList({ news }: Props) {
     return (
         <React.Fragment>
             {
-                news.map(newz => <New key={newz._id} newz={newz} />)
+                news.map(newz => <New key={newz._id + Math.random()} newz={newz} />)
             }
         </React.Fragment>
     );
