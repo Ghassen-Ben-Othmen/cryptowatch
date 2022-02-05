@@ -29,10 +29,5 @@ export const navLinks: NavLink[] = [
         text: 'News',
         icon: NewspaperOutlinedIcon,
         to: 'news'
-    },
-    {
-        text: 'Convertor',
-        icon: ChangeCircleOutlinedIcon,
-        to: 'convertor'
     }
 ];

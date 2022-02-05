@@ -10,7 +10,7 @@ interface Props {
 function New({ newz }: Props) {
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <ButtonBase style={{ textAlign: 'left' }}>
+            <ButtonBase style={{ textAlign: 'left' }} href={newz.link} target={"_blank"}>
                 <Card sx={{ width: 250, height: 250 }}>
                     <CardMedia
                         component="img"
