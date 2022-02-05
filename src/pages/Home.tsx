@@ -4,11 +4,11 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import CoinsList from '../components/CoinsList';
 import ExchangesList from '../components/ExchangesList';
 import NewsList from '../components/NewsList';
-import { retrieveCoinsAction } from '../store/coinsSlice';
-import { retrieveExchangesAction } from '../store/exchangesSlice';
+import { retrieveCoinsAction } from '../store/homeSlice';
+import { retrieveExchangesAction } from '../store/homeSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { forkJoin, tap } from 'rxjs';
-import { retrieveNewsAction } from '../store/newsSlice';
+import { retrieveNewsAction } from '../store/homeSlice';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -31,16 +31,14 @@ function Home() {
     const [exchangesLoading, setExchangesLoading] = useState(true);
     const [newsLoading, setNewsLoading] = useState(true);
 
-    const coinsState = useAppSelector(state => state.coins);
-    const exchangesState = useAppSelector(state => state.exchanges);
-    const newsState = useAppSelector(state => state.news);
+    const homeState = useAppSelector(state => state.home);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const retrieveCoins$ = retrieveCoinsAction(coinsState, dispatch, 0).pipe(tap(_ => setCoinsLoading(false)));
-        const retrieveExchanges$ = retrieveExchangesAction(exchangesState, dispatch, 1).pipe(tap(_ => setExchangesLoading(false)));
-        const retrieveNews$ = retrieveNewsAction(newsState, dispatch, 1).pipe(tap(_ => setNewsLoading(false)));
+        const retrieveCoins$ = retrieveCoinsAction(dispatch).pipe(tap(_ => setCoinsLoading(false)));
+        const retrieveExchanges$ = retrieveExchangesAction(dispatch).pipe(tap(_ => setExchangesLoading(false)));
+        const retrieveNews$ = retrieveNewsAction(dispatch).pipe(tap(_ => setNewsLoading(false)));
 
         const subscription = forkJoin([retrieveCoins$, retrieveExchanges$, retrieveNews$]).subscribe();
 
@@ -58,7 +56,7 @@ function Home() {
                     coinsLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <CoinsList coins={coinsState.data.slice(0, 12)} />
+                                <CoinsList coins={homeState.coins} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link
@@ -80,7 +78,7 @@ function Home() {
                     exchangesLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <ExchangesList exchanges={exchangesState.data.slice(0, 12)} />
+                                <ExchangesList exchanges={homeState.exchanges} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link
@@ -102,7 +100,7 @@ function Home() {
                     newsLoading ? <div>Loading...</div> : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <NewsList news={newsState.data.slice(0, 12)} />
+                                <NewsList news={homeState.news} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link

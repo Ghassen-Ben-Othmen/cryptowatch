@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Observable, tap } from "rxjs";
 import { AppDispatch } from ".";
 import Exchange from "../models/exchange";
-import { exchnagesService } from "../services";
+import { exchangesService } from "../services";
 
 type ExchangesState = {
     data: Exchange[];
@@ -25,7 +25,7 @@ const exchangesSlice = createSlice({
 const { setExchanges } = exchangesSlice.actions;
 
 const retrieveExchangesAction = (state: ExchangesState, dispatch: AppDispatch, page: number): Observable<Exchange[]> => {
-    return exchnagesService.retrieve({ page }).pipe(
+    return exchangesService.retrieve({ page }).pipe(
         tap(data => {
             if (page === 1) {
                 dispatch(setExchanges(data));

@@ -4,6 +4,7 @@ import { Avatar, ButtonBase, Card, CardContent, CardHeader, Grid, Stack, Typogra
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
+import { Link } from 'react-router-dom';
 
 interface Props {
     coin: CoinModel;
@@ -26,7 +27,7 @@ function Coin({ coin }: Props) {
     const sparklineData = coin.sparkline.filter(v => !!v).map(v => parseFloat(v!));
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <ButtonBase style={{ textAlign: 'left' }}>
+            <ButtonBase style={{ textAlign: 'left' }} component={Link} to={`/coins/${coin.uuid}`}>
                 <Card sx={{ width: 250, height: 250 }}>
                     <CardHeader
                         avatar={
