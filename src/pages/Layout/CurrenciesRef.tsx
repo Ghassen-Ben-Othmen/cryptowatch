@@ -12,20 +12,17 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import CurrencyRef from '../../models/currencyRef';
-import { selectCurrencyAction } from '../../store/navbarSlice';
-import { useAppDispatch } from '../../store/hooks';
 
 
 interface Props {
     currencies: CurrencyRef[];
     selectedCurrency: CurrencyRef;
+    onCurrencyChange: (curency: CurrencyRef) => void;
 }
 
-function CurrenciesRef({ currencies, selectedCurrency }: Props) {
+function CurrenciesRef({ currencies, selectedCurrency, onCurrencyChange }: Props) {
 
     const [open, setOpen] = React.useState(false);
-
-    const dispatch = useAppDispatch();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,7 +33,7 @@ function CurrenciesRef({ currencies, selectedCurrency }: Props) {
     };
 
     const handleCurrencyChange = (currencyRef: CurrencyRef) => {
-        selectCurrencyAction(dispatch, currencyRef);
+        onCurrencyChange(currencyRef);
         handleClose();
     }
 

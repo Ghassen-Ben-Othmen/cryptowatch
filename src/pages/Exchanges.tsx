@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Subject, takeUntil } from 'rxjs';
 import ExchangesList from '../components/ExchangesList';
+import ExchangesListSkeleton from '../components/ExchangesListSkeleton';
 import { retrieveExchangesAction } from '../store/exchangesSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -41,7 +42,11 @@ function Exchanges() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return (
+        <Grid container spacing={2}>
+            <ExchangesListSkeleton size={24} />
+        </Grid>
+    );
 
     return (
         <InfiniteScroll style={{ overflow: "inherit" }}

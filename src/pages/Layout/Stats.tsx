@@ -41,7 +41,7 @@ function Stats({ stats, currencySign }: Props) {
                             alignItems={'center'}
                         >
                             <Typography variant="caption" style={{ marginRight: 4 }}>Market Cap:</Typography>
-                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{stats.data.totalMarketCap}</Typography>
+                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{Number(stats.data.totalMarketCap).toFixed(3)}</Typography>
                         </Stack>
                         <Stack
                             direction="row"
@@ -49,7 +49,7 @@ function Stats({ stats, currencySign }: Props) {
                             alignItems={'center'}
                         >
                             <Typography variant="caption" style={{ marginRight: 4 }}>Markets:</Typography>
-                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{stats.data.totalMarkets}</Typography>
+                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{stats.data.totalMarkets}</Typography>
                         </Stack>
                         <Stack
                             direction="row"
@@ -57,7 +57,7 @@ function Stats({ stats, currencySign }: Props) {
                             alignItems={'center'}
                         >
                             <Typography variant="caption" style={{ marginRight: 4 }}>24h Vol:</Typography>
-                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{stats.data.total24hVolume}</Typography>
+                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{Number(stats.data.total24hVolume).toFixed(3)}</Typography>
                         </Stack>
                     </Stack>
                 </React.Fragment>

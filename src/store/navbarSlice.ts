@@ -37,19 +37,24 @@ const navbarSlice = createSlice({
 const { setGlobalStats, setCurrenciesRef, setSelectedCurrency } = navbarSlice.actions;
 
 const initAction = (dispatch: AppDispatch): Observable<any> => {
-    return globalStatsService.retrieve().pipe(
-        mergeMap(stats => {
-            dispatch(setGlobalStats(stats));
-            return currenciesRefService.retrieve();
-        }),
-        tap(currenciesRef => {
+    return currenciesRefService.retrieve().pipe(
+        mergeMap(currenciesRef => {
             dispatch(setCurrenciesRef(currenciesRef));
+            return globalStatsService.retrieve({ referenceCurrencyUuid: currenciesRef[0].uuid });
+        }),
+        tap(stats => {
+            dispatch(setGlobalStats(stats));
         })
     );
 }
 
 const selectCurrencyAction = (dispatch: AppDispatch, currencyRef: CurrencyRef) => {
-    dispatch(setSelectedCurrency(currencyRef));
+    return globalStatsService.retrieve({ referenceCurrencyUuid: currencyRef.uuid }).pipe(
+        tap(stats => {
+            dispatch(setSelectedCurrency(currencyRef));
+            dispatch(setGlobalStats(stats));
+        })
+    );
 }
 
 export { navbarSlice, initAction, selectCurrencyAction };

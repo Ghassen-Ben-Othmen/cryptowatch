@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { drawerWidth } from './constants';
-import { IconButton, Toolbar } from '@mui/material';
+import { IconButton, Skeleton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Brand from './Brand';
-import ThemeSwitch from './ThemeSwitch';
-import { initAction } from '../../store/navbarSlice';
+import { initAction, selectCurrencyAction } from '../../store/navbarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import CurrenciesRef from './CurrenciesRef';
 import Stats from './Stats';
+import CurrencyRef from '../../models/currencyRef';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -44,9 +44,15 @@ interface Props {
 function AppNavBar({ open, handleDrawerOpen }: Props) {
 
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   const dispatch = useAppDispatch();
   const navbarState = useAppSelector(state => state.navbar);
+
+  const handleCurrencyChange = (currencyRef: CurrencyRef) => {
+    setStatsLoading(true);
+    selectCurrencyAction(dispatch, currencyRef).subscribe(_ => setStatsLoading(false));
+  }
 
   useEffect(() => {
     const subscription = initAction(dispatch).subscribe(_ => setLoading(false));
@@ -74,15 +80,15 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
         {!open && <Brand />}
         <div style={{ flexGrow: 1, overflowX: 'auto' }}>
           {
-            loading ? <div>Loading...</div> : (
+            loading || statsLoading ? <Skeleton /> : (
               <Stats stats={navbarState.stats} currencySign={navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol} />
             )
           }
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {
-            loading ? <div>L...</div> : (
-              <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} />
+            loading ? <Skeleton /> : (
+              <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} onCurrencyChange={handleCurrencyChange} />
             )
           }
           {/* <ThemeSwitch /> */}

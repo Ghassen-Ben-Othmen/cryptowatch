@@ -10,7 +10,7 @@ function ExchangesList({ exchanges }: Props) {
     return (
         <React.Fragment>
             {
-                exchanges.map(exchange => <Exchange key={exchange.id + Math.random()} exchange={exchange} />)
+                exchanges.map(exchange => <Exchange key={exchange.id} exchange={exchange} />)
             }
         </React.Fragment>
     );
