@@ -28,7 +28,7 @@ function Coin({ coin }: Props) {
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <ButtonBase style={{ textAlign: 'left' }} component={Link} to={`/coins/${coin.uuid}`}>
-                <Card sx={{ width: 250, height: 250 }}>
+                <Card sx={{ width: 245, height: 245 }}>
                     <CardHeader
                         avatar={
                             <Avatar aria-label="recipe" src={coin.iconUrl || ''}>

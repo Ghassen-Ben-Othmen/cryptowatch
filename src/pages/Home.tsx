@@ -9,6 +9,7 @@ import { retrieveExchangesAction } from '../store/homeSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { forkJoin, tap } from 'rxjs';
 import { retrieveNewsAction } from '../store/homeSlice';
+import NewsListSkeleton from '../components/NewsListSkeleton';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -36,6 +37,7 @@ function Home() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        window.scroll({ top: 0 });
         const retrieveCoins$ = retrieveCoinsAction(dispatch).pipe(tap(_ => setCoinsLoading(false)));
         const retrieveExchanges$ = retrieveExchangesAction(dispatch).pipe(tap(_ => setExchangesLoading(false)));
         const retrieveNews$ = retrieveNewsAction(dispatch).pipe(tap(_ => setNewsLoading(false)));
@@ -97,7 +99,11 @@ function Home() {
             <section style={{ marginBottom: '1.5rem' }}>
                 <Title variant='h5'>Coins News</Title>
                 {
-                    newsLoading ? <div>Loading...</div> : (
+                    newsLoading ? (
+                        <Grid container spacing={2}>
+                            <NewsListSkeleton size={12} />
+                        </Grid>
+                    ) : (
                         <React.Fragment>
                             <Grid container spacing={2}>
                                 <NewsList news={homeState.news} />

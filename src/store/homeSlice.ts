@@ -53,7 +53,7 @@ const retrieveExchangesAction = (dispatch: AppDispatch) => {
 }
 
 const retrieveNewsAction = (dispatch: AppDispatch) => {
-    return newsService.retrieve({ offset: 0 }).pipe(
+    return newsService.retrieve({ page: 1 }).pipe(
         tap(data => {
             dispatch(setNews(data.slice(0, 12)));
         })

@@ -32,7 +32,7 @@ function Exchange({ exchange }: Props) {
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <ButtonBase style={{ textAlign: 'left', height: '100%' }} href={exchange.url || ""} target={"_blank"}>
-                <Card sx={{ width: 250, height: '100%' }}>
+                <Card sx={{ width: 245, height: '100%' }}>
                     <CardHeader
                         avatar={
                             <Avatar aria-label="recipe" src={exchange.image || ''}>

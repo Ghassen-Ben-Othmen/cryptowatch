@@ -24,10 +24,10 @@ const newsSlice = createSlice({
 
 const { setNews } = newsSlice.actions;
 
-const retrieveNewsAction = (state: NewsState, dispatch: AppDispatch, page: number): Observable<News[]> => {
-    return newsService.retrieve({ page }).pipe(
+const retrieveNewsAction = (state: NewsState, dispatch: AppDispatch, queryParams: any): Observable<News[]> => {
+    return newsService.retrieve(queryParams).pipe(
         tap(data => {
-            if (page === 1) {
+            if (queryParams['page'] === 1) {
                 dispatch(setNews(data));
             } else {
                 dispatch(setNews(state.data.concat(data)));

@@ -1,12 +1,13 @@
-import { ButtonBase, Grid, Stack, TextField } from '@mui/material';
+import { ButtonBase, Grid, Skeleton, Stack, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Subject, takeUntil } from 'rxjs';
 import NewsList from '../components/NewsList';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { retrieveNewsAction } from '../store/newsSlice';
 import SearchIcon from '@mui/icons-material/Search';
+import NewsListSkeleton from '../components/NewsListSkeleton';
 
 function News() {
     const [loading, setLoading] = useState(true);
@@ -14,12 +15,13 @@ function News() {
     const [hasMore, setHasMore] = useState(true);
     const [destroy$] = useState(new Subject<void>());
     const [search, setSearch] = useState('');
+    const searchRef = useRef<any>(null);
 
     const newsState = useAppSelector(state => state.news);
     const dispatch = useAppDispatch();
 
-    const retrieveNews = () => {
-        retrieveNewsAction(newsState, dispatch, page).pipe(
+    const retrieveNews = (page: number, search: string) => {
+        retrieveNewsAction(newsState, dispatch, { page, q: search }).pipe(
             takeUntil(destroy$)
         ).subscribe(res => {
             if (page === 1) { // reset loading for initial call
@@ -35,17 +37,22 @@ function News() {
     }
 
     const handleSearch = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setSearch(e.target.value)
+        if (e.target)
+            setSearch(e.target.value)
     }
 
     const handleSearchSubmit = (e?: FormEvent<HTMLFormElement>) => {
         if (!search) return;
         e?.preventDefault();
-        console.log(search)
+        searchRef.current?.blur();
+        setLoading(true);
+        window.scroll({ top: 0 }); // scroll to top to prevent fetching next page
+        retrieveNews(1, search);
     }
 
     useEffect(() => {
-        retrieveNews();
+        window.scroll({ top: 0 }); // scroll to top to prevent fetching next page
+        retrieveNews(page, search);
 
         return () => {
             destroy$.next();
@@ -53,8 +60,6 @@ function News() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    if (loading) return <div>Loading...</div>
 
     return (
         <React.Fragment>
@@ -64,7 +69,7 @@ function News() {
                     <Grid item xs={12} md={6} justifyContent={"center"}>
                         <form onSubmit={handleSearchSubmit}>
                             <Stack direction={"row"}>
-                                <TextField fullWidth style={{ background: "white" }} value={search} onChange={handleSearch} id="outlined-basic" label="Search" variant="outlined" size='small' />
+                                <TextField inputRef={searchRef} value={search} onBlur={() => handleSearchSubmit()} onChange={handleSearch} fullWidth style={{ background: "white" }} id="outlined-basic" label="Search" variant="outlined" size='small' />
                                 <ButtonBase onClick={() => handleSearchSubmit()}>
                                     <SearchIcon sx={{ color: 'action.active', ml: 1, height: "40px", width: "40px" }} />
                                 </ButtonBase>
@@ -74,11 +79,20 @@ function News() {
                     <Grid item xs={0} md={3}></Grid>
                 </Grid>
             </Box>
-            <InfiniteScroll style={{ overflow: "inherit" }} next={retrieveNews} dataLength={newsState.data.length} hasMore={hasMore} loader={<div>Loading..</div>}>
-                <Grid container spacing={2}>
-                    <NewsList news={newsState.data} />
-                </Grid>
-            </InfiniteScroll>
+            {
+                loading ? (
+                    <Grid container spacing={2}>
+                        <NewsListSkeleton size={24} />
+                    </Grid>
+                ) : (
+
+                    <InfiniteScroll style={{ overflow: "inherit" }} scrollThreshold={"20px"} next={() => retrieveNews(page, search)} dataLength={newsState.data?.length} hasMore={hasMore} loader={<Skeleton width={"60%"} />}>
+                        <Grid container spacing={2}>
+                            <NewsList news={newsState.data} />
+                        </Grid>
+                    </InfiniteScroll>
+                )
+            }
         </React.Fragment>
     );
 }

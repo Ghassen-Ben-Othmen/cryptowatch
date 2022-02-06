@@ -85,7 +85,7 @@ function AppNavBar({ open, handleDrawerOpen }: Props) {
               <CurrenciesRef currencies={navbarState.currenciesRef} selectedCurrency={navbarState.selectedCurrency} />
             )
           }
-          <ThemeSwitch />
+          {/* <ThemeSwitch /> */}
         </div>
       </Toolbar>
     </AppBar>
