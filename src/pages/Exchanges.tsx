@@ -33,6 +33,7 @@ function Exchanges() {
     }
 
     useEffect(() => {
+        window.scroll({ top: 0 }); // scroll to top to prevent fetching next page
         retrieveExchanges();
 
         return () => {

@@ -6,10 +6,6 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { Link } from 'react-router-dom';
 
-interface Props {
-    coin: CoinModel;
-}
-
 const TitleHeader = ({ name, change }: { name: string; change: number }) => (
     <Stack direction="row">
         <Typography variant='body2' flexGrow={1}>{name}</Typography>
@@ -23,7 +19,13 @@ const TitleHeader = ({ name, change }: { name: string; change: number }) => (
     </Stack>
 );
 
-function Coin({ coin }: Props) {
+
+interface Props {
+    coin: CoinModel;
+    currencySign: string
+}
+
+function Coin({ coin, currencySign }: Props) {
     const sparklineData = coin.sparkline.filter(v => !!v).map(v => parseFloat(v!));
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -41,11 +43,11 @@ function Coin({ coin }: Props) {
                     <CardContent>
                         <Stack direction="row" spacing={1}>
                             <Typography variant="caption" flexGrow={1}>Price</Typography>
-                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>$ {Number(coin.price).toFixed(2)}</Typography>
+                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{Number(coin.price).toFixed(2)}</Typography>
                         </Stack>
                         <Stack direction="row" spacing={1} marginBottom={2}>
                             <Typography variant="caption" flexGrow={1}>Market Cap</Typography>
-                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>$ {Number(coin.marketCap).toFixed(2)}</Typography>
+                            <Typography variant="caption" color={'primary'} style={{ fontWeight: 'bold' }}>{currencySign}{' '}{Number(coin.marketCap).toFixed(2)}</Typography>
                         </Stack>
                         <Sparklines data={sparklineData} width={200} height={90}>
                             <SparklinesLine color={Number(coin.change) > 0 ? "green" : "red"} />

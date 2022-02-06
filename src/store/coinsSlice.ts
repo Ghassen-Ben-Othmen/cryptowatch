@@ -24,10 +24,10 @@ const coinsSlice = createSlice({
 
 const { setCoins } = coinsSlice.actions;
 
-const retrieveCoinsAction = (state: CoinsState, dispatch: AppDispatch, offset: number): Observable<Coin[]> => {
-    return coinsService.retrieve({ offset }).pipe(
+const retrieveCoinsAction = (state: CoinsState, dispatch: AppDispatch, queryParams: any): Observable<Coin[]> => {
+    return coinsService.retrieve(queryParams).pipe(
         tap(data => {
-            if (offset === 0) {
+            if (queryParams['offset'] === 0) {
                 dispatch(setCoins(data));
             } else {
                 dispatch(setCoins(state.data.concat(data)));

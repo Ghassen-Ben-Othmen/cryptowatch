@@ -36,8 +36,8 @@ const homeSlice = createSlice({
 
 const { setCoins, setExchanges, setNews } = homeSlice.actions;
 
-const retrieveCoinsAction = (dispatch: AppDispatch) => {
-    return coinsService.retrieve({ offset: 0 }).pipe(
+const retrieveCoinsAction = (dispatch: AppDispatch, queryParams: any) => {
+    return coinsService.retrieve(queryParams).pipe(
         tap(data => {
             dispatch(setCoins(data.slice(0, 12)));
         })

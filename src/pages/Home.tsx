@@ -10,6 +10,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { forkJoin, tap } from 'rxjs';
 import { retrieveNewsAction } from '../store/homeSlice';
 import NewsListSkeleton from '../components/NewsListSkeleton';
+import ExchangesListSkeleton from '../components/ExchangesListSkeleton';
+import CoinsListSkeleton from '../components/CoinsListSkeleton';
 
 const Title = styled(Typography)(({ theme }) => ({
     overflow: 'hidden',
@@ -33,12 +35,14 @@ function Home() {
     const [newsLoading, setNewsLoading] = useState(true);
 
     const homeState = useAppSelector(state => state.home);
+    const selectedCurrencyRef = useAppSelector(state => state.navbar.selectedCurrency);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        if (!selectedCurrencyRef.uuid) return;
         window.scroll({ top: 0 });
-        const retrieveCoins$ = retrieveCoinsAction(dispatch).pipe(tap(_ => setCoinsLoading(false)));
+        const retrieveCoins$ = retrieveCoinsAction(dispatch, { offset: 0, referenceCurrencyUuid: selectedCurrencyRef.uuid }).pipe(tap(_ => setCoinsLoading(false)));
         const retrieveExchanges$ = retrieveExchangesAction(dispatch).pipe(tap(_ => setExchangesLoading(false)));
         const retrieveNews$ = retrieveNewsAction(dispatch).pipe(tap(_ => setNewsLoading(false)));
 
@@ -48,17 +52,21 @@ function Home() {
             subscription.unsubscribe();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [selectedCurrencyRef]);
 
     return (
         <React.Fragment>
             <section style={{ marginBottom: '1.5rem' }}>
                 <Title variant='h5'>Top Coins</Title>
                 {
-                    coinsLoading ? <div>Loading...</div> : (
+                    coinsLoading ? (
+                        <Grid container spacing={2}>
+                            <CoinsListSkeleton size={12} />
+                        </Grid>
+                    ) : (
                         <React.Fragment>
                             <Grid container spacing={2}>
-                                <CoinsList coins={homeState.coins} />
+                                <CoinsList coins={homeState.coins} currencySign={selectedCurrencyRef.sign || selectedCurrencyRef.symbol} />
                             </Grid>
                             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                                 <Link
@@ -77,7 +85,11 @@ function Home() {
             <section style={{ marginBottom: '1.5rem' }}>
                 <Title variant='h5'>Top Exchanges</Title>
                 {
-                    exchangesLoading ? <div>Loading...</div> : (
+                    exchangesLoading ? (
+                        <Grid container spacing={2}>
+                            <ExchangesListSkeleton size={12} />
+                        </Grid>
+                    ) : (
                         <React.Fragment>
                             <Grid container spacing={2}>
                                 <ExchangesList exchanges={homeState.exchanges} />

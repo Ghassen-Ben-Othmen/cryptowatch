@@ -4,13 +4,14 @@ import Coin from './Coin';
 
 interface Props {
     coins: CoinModel[];
+    currencySign: string
 }
 
-function CoinsList({ coins }: Props) {
+function CoinsList({ coins, currencySign }: Props) {
     return (
         <React.Fragment>
             {
-                coins.map(coin => <Coin key={coin.uuid + Math.random()} coin={coin} />)
+                coins.map(coin => <Coin key={coin.uuid} coin={coin} currencySign={currencySign} />)
             }
         </React.Fragment>
     );
