@@ -86,7 +86,12 @@ function News() {
                     </Grid>
                 ) : (
 
-                    <InfiniteScroll style={{ overflow: "inherit" }} scrollThreshold={"20px"} next={() => retrieveNews(page, search)} dataLength={newsState.data?.length} hasMore={hasMore} loader={<Skeleton width={"60%"} />}>
+                    <InfiniteScroll style={{ overflow: "inherit" }}
+                        scrollThreshold={"20px"}
+                        next={() => retrieveNews(page, search)}
+                        dataLength={newsState.data?.length}
+                        hasMore={hasMore}
+                        loader={<Skeleton width={"60%"} />}>
                         <Grid container spacing={2}>
                             <NewsList news={newsState.data} />
                         </Grid>

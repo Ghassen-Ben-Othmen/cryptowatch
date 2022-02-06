@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Subject, takeUntil } from 'rxjs';
@@ -16,7 +16,7 @@ function Exchanges() {
     const dispatch = useAppDispatch();
 
     const retrieveExchanges = () => {
-        retrieveExchangesAction(exchangesState, dispatch, page).pipe(
+        retrieveExchangesAction(exchangesState, dispatch, { page }).pipe(
             takeUntil(destroy$)
         ).subscribe(res => {
             if (page === 1) { // reset loading for initial call
@@ -45,9 +45,11 @@ function Exchanges() {
 
     return (
         <InfiniteScroll style={{ overflow: "inherit" }}
-            next={retrieveExchanges} dataLength={exchangesState.data.length}
+            next={retrieveExchanges}
+            dataLength={exchangesState.data.length}
             hasMore={hasMore}
-            loader={<div>Loading..</div>}
+            loader={<Skeleton width={"60%"} />}
+            scrollThreshold={"20px"}
         >
             <Grid container spacing={2}>
                 <ExchangesList exchanges={exchangesState.data} />

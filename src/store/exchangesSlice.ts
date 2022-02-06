@@ -24,10 +24,10 @@ const exchangesSlice = createSlice({
 
 const { setExchanges } = exchangesSlice.actions;
 
-const retrieveExchangesAction = (state: ExchangesState, dispatch: AppDispatch, page: number): Observable<Exchange[]> => {
-    return exchangesService.retrieve({ page }).pipe(
+const retrieveExchangesAction = (state: ExchangesState, dispatch: AppDispatch, queryParams: any): Observable<Exchange[]> => {
+    return exchangesService.retrieve(queryParams).pipe(
         tap(data => {
-            if (page === 1) {
+            if (queryParams['page'] === 1) {
                 dispatch(setExchanges(data));
             } else {
                 dispatch(setExchanges(state.data.concat(data)));
