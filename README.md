@@ -1,46 +1,129 @@
-# Getting Started with Create React App
+<div id="top"></div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<br />
+<div align="center">
+  <h3 align="center">CryptoWatch</h3>
 
-## Available Scripts
+  <p align="center">
+    A WebApp that allows you to follow Crptos' News and Stats.
+    <br />
+  </p>
+</div>
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Screenshots</a></li>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-### `npm run build`
+[![Home Screen Shot][home-screenshot]](https://github.com/Ghassen-Ben-Othmen/cryptowatch)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+CryptoWatch is one of my just-for-fun projects. The application allows you to follow the currently available Cryptos in the market and gives you some insights about the actual prices and stats of Cryptos. In addition, Cryptowatch gives you the possibility to search news and updates about coins. Grouping all these features in one single place gives you the ability to reduce the amount of time passed searching for Cryptos.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Screenshots
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![Coins Screen Shot][coins-screenshot]
+![Coin Detail Screen Shot][coinDetail-screenshot]
+![Exchanges Name Screen Shot][exchanges-screenshot]
+![News Name Screen Shot][news-screenshot]
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Built With
 
-## Learn More
+In order to transform the idea into a real functional product, the list bellow of technologies & tools were used:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* [RapidAPI](https://rapidapi.com/hub)
+* [React.js](https://reactjs.org/)
+* [Material-UI](https://mui.com/)
+* [Redux toolkit](https://redux-toolkit.js.org/)
+* [React-Redux](https://react-redux.js.org/)
+* [React-chartjs-2](https://github.com/reactchartjs/react-chartjs-2)
+* [Chart.js](https://www.chartjs.org/)
+* [React-infinite-scroll-component](https://github.com/ankeetmaini/react-infinite-scroll-component)
+* [React-sparklines](https://github.com/borisyankov/react-sparklines)
+* [Rxjs](https://rxjs.dev/)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy up and running follow these steps.
+
+### Prerequisites
+
+You need to have [Node.js](https://nodejs.org/) and npm to be installed in your local machine. Verify that by executing 
+* node
+  ```sh
+  node -v
+  ```
+* npm
+  ```sh
+  npm -v
+  ```
+
+### Installation
+
+In order to interact with real data the project uses some API endpoints from [RapidAPI](https://rapidapi.com/hub) and [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api)
+
+1. Get API Keys at:
+    * [https://rapidapi.com/Coinranking/api/coinranking1/](https://rapidapi.com/Coinranking/api/coinranking1/)
+    * [https://rapidapi.com/newscatcher-api-newscatcher-api-default/api/free-news/](https://rapidapi.com/newscatcher-api-newscatcher-api-default/api/free-news/)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/Ghassen-Ben-Othmen/cryptowatch
+   ```
+3. Add `.env` file:
+   ```sh
+   REACT_APP_RAPID_API_COINRANKING_HOST=
+   REACT_APP_RAPID_API_COINRANKING_KEY=
+   REACT_APP_RAPID_API_FREENEWS_HOST=
+   REACT_APP_RAPID_API_FREENEWS_KEY=
+   GENERATE_SOURCEMAP=false
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Start the project
+   ```sh
+   npm start
+   ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+[home-screenshot]: screenshots/home.png
+[coinDetail-screenshot]: screenshots/coinDetail.png
+[coins-screenshot]: screenshots/coins.png
+[exchanges-screenshot]: screenshots/exchanges.png
+[news-screenshot]: screenshots/news.png
