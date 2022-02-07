@@ -1,9 +1,7 @@
 import { Card, CardActions, CardContent, Grid, Skeleton } from '@mui/material';
 import React from 'react';
 
-type Props = {};
-
-function NewSkeleton({ }: Props) {
+function NewSkeleton() {
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             <Card sx={{ width: 250, height: 250 }}>
