@@ -30,11 +30,15 @@ const navbarSlice = createSlice({
         },
         setSelectedCurrency: (state, action: PayloadAction<CurrencyRef>) => {
             state.selectedCurrency = action.payload;
+        },
+        setNavbarState: (state, action) => { // aggregate the state change used in order to minimize the number of calling useAppSelector
+            state.stats = action.payload.stats;
+            state.selectedCurrency = action.payload.selectedCurrency;
         }
     }
 });
 
-const { setGlobalStats, setCurrenciesRef, setSelectedCurrency } = navbarSlice.actions;
+const { setGlobalStats, setCurrenciesRef, setSelectedCurrency, setNavbarState } = navbarSlice.actions;
 
 const initAction = (dispatch: AppDispatch): Observable<any> => {
     return currenciesRefService.retrieve().pipe(
@@ -51,8 +55,10 @@ const initAction = (dispatch: AppDispatch): Observable<any> => {
 const selectCurrencyAction = (dispatch: AppDispatch, currencyRef: CurrencyRef) => {
     return globalStatsService.retrieve({ referenceCurrencyUuid: currencyRef.uuid }).pipe(
         tap(stats => {
-            dispatch(setSelectedCurrency(currencyRef));
-            dispatch(setGlobalStats(stats));
+            dispatch(setNavbarState({
+                stats: stats,
+                selectedCurrency: currencyRef
+            }));
         })
     );
 }

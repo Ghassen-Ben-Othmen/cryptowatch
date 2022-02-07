@@ -30,14 +30,14 @@ const coinDetailSlice = createSlice({
 
 const { setCoinDetail, setCoinHistory } = coinDetailSlice.actions;
 
-const retrieveCoinDetailAction = (dispatch: AppDispatch, id: string): Observable<any> => {
-    return coinDetailService.retrieve({}, id).pipe(
+const retrieveCoinDetailAction = (dispatch: AppDispatch, queryParams: any, id: string): Observable<any> => {
+    return coinDetailService.retrieve(queryParams, id).pipe(
         mergeMap(data => {
             dispatch(setCoinDetail(data));
-            return coinHistoryService.retrieve({}, id)
+            return coinHistoryService.retrieve(queryParams, id)
         }),
         tap(data => {
-            dispatch(setCoinHistory(data));
+            dispatch(setCoinHistory([...data].reverse()));
         })
     );
 }

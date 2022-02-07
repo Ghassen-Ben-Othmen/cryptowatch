@@ -11,6 +11,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LanguageIcon from '@mui/icons-material/Language';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -23,6 +24,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Box } from '@mui/system';
+import CoinDetailSkeleton from '../components/CoinDetailSkeleton';
 
 ChartJS.register(
     CategoryScale,
@@ -62,7 +64,7 @@ const TitleHeader = ({ name, change }: { name: string; change: number }) => (
 
 function CoinDetail() {
     const [loading, setLoading] = useState(true);
-    const [historyPeriod, setHistoryPeriod] = useState("3h"); // used for chartjs changing period
+    const [timePeriod, setTimePeriod] = useState("3h"); // used for chartjs changing period
 
     const { data, history } = useAppSelector(state => state.coinDetail);
     const navbarState = useAppSelector(state => state.navbar);
@@ -73,7 +75,7 @@ function CoinDetail() {
 
     useEffect(() => {
         if (!navbarState.stats?.data) return; // wait until navbar call is resolved to get some data
-        const subscription = retrieveCoinDetailAction(dispatch, id!).subscribe(_ => {
+        const subscription = retrieveCoinDetailAction(dispatch, { referenceCurrencyUuid: navbarState.selectedCurrency.uuid, timePeriod: timePeriod }, id!).subscribe(_ => {
             setLoading(false);
         });
 
@@ -81,10 +83,10 @@ function CoinDetail() {
             subscription.unsubscribe();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, navbarState])
+    }, [id, navbarState, timePeriod])
 
     const historyData = { // used for chartjs
-        labels: history.map(h => new Date(h.timestamp).toLocaleString()),
+        labels: history.map(h => new Date(h.timestamp * 1000).toLocaleString()),
         datasets: [
             {
                 label: 'Price',
@@ -95,7 +97,9 @@ function CoinDetail() {
         ]
     }
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return (
+        <CoinDetailSkeleton />
+    );
 
     return (
         <Grid container spacing={2}>
@@ -119,8 +123,8 @@ function CoinDetail() {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Period"
-                                value={historyPeriod}
-                                onChange={(e) => setHistoryPeriod(e.target.value)}
+                                value={timePeriod}
+                                onChange={(e) => setTimePeriod(e.target.value)}
                             >
                                 <MenuItem selected value={"3h"}>3h</MenuItem>
                                 <MenuItem value={"24h"}>24h</MenuItem>
@@ -144,18 +148,18 @@ function CoinDetail() {
                                     <Divider variant="fullWidth" sx={{ mb: 2 }} />
                                     <Stack direction={"row"}>
                                         <Typography variant='caption' flexGrow={1}>
-                                            Price {data.priceAt && `(${new Date(data.priceAt).toLocaleDateString()})`}
+                                            Price {data.priceAt && `(${new Date(data.priceAt * 1000).toLocaleDateString()})`}
                                         </Typography>
                                         <Typography variant='caption' fontWeight={"bold"}>
-                                            $ {Number(data.price).toFixed(2)}
+                                            {navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol}{' '}{Number(data.price).toFixed(2)}
                                         </Typography>
                                     </Stack>
                                     <Stack direction={"row"}>
                                         <Typography variant='caption' flexGrow={1}>
-                                            Highest Price ({new Date(data.allTimeHigh.timestamp).toLocaleDateString()})
+                                            Highest Price ({new Date(data.allTimeHigh.timestamp * 1000).toLocaleDateString()})
                                         </Typography>
                                         <Typography variant='caption' fontWeight={"bold"}>
-                                            $ {Number(data.allTimeHigh.price).toFixed(2)}
+                                            {navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol}{' '}{Number(data.allTimeHigh.price).toFixed(2)}
                                         </Typography>
                                     </Stack>
                                 </section>
@@ -165,13 +169,13 @@ function CoinDetail() {
                                     <Stack direction={"row"}>
                                         <Typography variant='caption' flexGrow={1}>Trading Vol. (24h)</Typography>
                                         <Typography variant='caption' fontWeight={"bold"}>
-                                            $ {Number(data['24hVolume']).toFixed(2)}
+                                            {navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol}{' '}{Number(data['24hVolume']).toFixed(2)}
                                         </Typography>
                                     </Stack>
                                     <Stack direction={"row"}>
                                         <Typography variant='caption' flexGrow={1}>Market Cap.</Typography>
                                         <Typography variant='caption' fontWeight={"bold"}>
-                                            $ {Number(data.marketCap).toFixed(2)}
+                                            {navbarState.selectedCurrency.sign || navbarState.selectedCurrency.symbol}{' '}{Number(data.marketCap).toFixed(2)}
                                         </Typography>
                                     </Stack>
                                     <Stack direction={"row"}>
@@ -213,7 +217,7 @@ function CoinDetail() {
                                         <Typography variant='caption' fontWeight={"bold"}>
                                             {
                                                 data.supply.total ? (
-                                                    data.supply.total
+                                                    data.supply.total + ' ' + data.symbol
                                                 ) : 'N/A'
                                             }
                                         </Typography>
@@ -239,6 +243,9 @@ function CoinDetail() {
                                                 break;
                                             case 'youtube':
                                                 linkIcon = <YouTubeIcon color='error' />;
+                                                break;
+                                            case 'github':
+                                                linkIcon = <GitHubIcon />
                                         }
 
                                         return (
