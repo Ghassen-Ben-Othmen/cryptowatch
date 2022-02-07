@@ -2,9 +2,7 @@ import React from 'react';
 import { CardHeader, Grid, Skeleton, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 
-type Props = {};
-
-function CoinDetailSkeleton({ }: Props) {
+function CoinDetailSkeleton() {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
