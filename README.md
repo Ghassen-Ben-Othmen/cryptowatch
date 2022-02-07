@@ -5,7 +5,7 @@
   <h3 align="center">CryptoWatch</h3>
 
   <p align="center">
-    A WebApp that allows you to follow Crptos' News and Stats.
+    A WebApp that allows you to follow Cryptos' News and Stats.
     <br />
   </p>
 </div>
